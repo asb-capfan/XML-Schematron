@@ -1,0 +1,18 @@
+Revision history for Perl extension XML::Schematron.
+
+0.52  Tue Dec 05 2000
+	- added add_test() method.
+	- added schema() method to the base package, dropped requirement of 
+	  'schema' arg to the new() constructor.
+	- added the tests() method to the base package.
+ 	- updated docs.
+
+0.51  Tue Oct 31 2000
+	- added array vs. string context for returning messages.
+        - removed dependency on Sablotron in base package 
+          (Thanks to Matt Sergeant for the catch in both cases)
+        - Added Copyright notice
+
+0.50  Mon Oct 30 16:25:09 2000
+	- original version; created by h2xs 1.19
+
