@@ -5,7 +5,7 @@ use SAXDriver::XMLParser;
 
 use vars qw/$VERSION/;
 
-$VERSION = '0.52';
+$VERSION = '0.53';
 
 sub new {
     my ($proto, %args) = @_;
@@ -124,7 +124,7 @@ __END__
 
 =head1 NAME
 
-XML::Schematron - Perl implementation of the Schematron
+XML::Schematron - Perl implementation of the Schematron.
 
 =head1 SYNOPSIS
 
@@ -133,6 +133,8 @@ XML::Schematron - Perl implementation of the Schematron
 =head1 DESCRIPTION
 
 This is the superclass for the XML::Schematron::* modules.
+
+Please run perldoc XML::Schematron::XPath, or perldoc XML::Schematron::Sablotron for examples and complete documentation.
 
 =head1 AUTHOR
 

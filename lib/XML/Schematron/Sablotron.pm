@@ -142,15 +142,15 @@ schema defines a set of rules in the XPath language that are used to examine the
 
 A simplified example: 
 
-<schema>
- <pattern>
-  <rule context="page">
-   <assert test="count(*)=count(title|body)">The page element may only contain title or body elements.</assert> 
-   <assert test="@name">A page element must contain a name attribute.</assert> 
-   <report test="string-length(@name) &lt; 5">A page element name attribute must be at least 5 characters long.</report> 
-  </rule>
- </pattern>
-</schema>
+ <schema>
+  <pattern>
+   <rule context="page">
+    <assert test="count(*)=count(title|body)">The page element may only contain title or body elements.</assert> 
+    <assert test="@name">A page element must contain a name attribute.</assert> 
+    <report test="string-length(@name) &lt; 5">A page element name attribute must be at least 5 characters long.</report> 
+   </rule>
+  </pattern>
+ </schema>
 
 Note that an 'assert' rule will return if the result of the test expression is I<not> true, while a 'report' rule will return
 only if the test expression evalutes to true.
@@ -159,10 +159,79 @@ only if the test expression evalutes to true.
 
 =over 4
 
-=item new(schema => 'my_schema_file.xml')
+=item new()
+  
+The 'new' constructor accepts the following "named" arguments:
 
-The 'new' constructor requires the argument 'schema' that should be set (using a key/value pair or single hash) to the
-location of the schema you wish to use.
+=over 4
+
+=item * schema
+
+The filename of the schema to use for generating tests.
+
+=item * tests
+
+The tests argument is an B<alternative> to the use of a schema as a means for defining the test stack. It should be a 
+reference to a list of lists where the format of the sub-lists must conform to the following order:
+
+  [$xpath_exp, $context, $message, $test_type, $pattern]
+      
+=back
+
+=item schema()
+
+When called with a single scalar as its argument, this method sets/updates the schema file to be used for generatng
+tests. Otherwise, it simply returns the name of the schema file (if any).
+
+=item tests()
+
+When called with a reference to a list of lists as its argument (see the format in the description of the 'tests' argument to 
+the new() method for details), this method sets the current test stack. Otherwise, it returns an arrayref to the current test 
+stack (if any).
+
+=item add_test(%args);
+
+The add_test() method allows you push additional tests on to the stack before validation using the typical "hash of named
+parameters" style.
+
+Arguments for this method:
+
+=over 4
+
+=item * expr (required)
+
+The XPath expression to evaluate.
+                 
+=item * context (required)
+
+An element name or XPath location to use as the context of the test expression.
+
+=item * type (required)
+
+The B<type> argument must be set to either 'assert' or 'report'. Assert tests will return the associated message only if the
+the corresponding test expression is B<not> true, while 'report' tests will return only if their associated test expression
+B<are> true.
+
+=item * message (required)
+
+The text message to display when the test condition is met.
+
+=item * pattern (optional)
+
+Optional descriptive text for the returned message that allows a logical grouping of tests.
+
+Example:
+
+      
+  $obj->add_test(expr => 'count(@*) > 0',
+                 context => '/pattern',
+                 message => 'Pattern should have at least one attribute',
+                 type => 'assert',
+                 pattern => 'Basic tests');
+
+Note that add_test() pushes a new test on to the existing test list, while tests() redefines the entire list.
+
+=back
 
 =item validate('my_xml_file.xml')
 

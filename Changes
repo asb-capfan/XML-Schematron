@@ -1,4 +1,7 @@
 Revision history for Perl extension XML::Schematron.
+0.53  Wed Dec 06 2000
+	- POD doc fixes.
+	- Removed requirement for XML::Sablotron from the Makefile.
 
 0.52  Tue Dec 05 2000
 	- added add_test() method.

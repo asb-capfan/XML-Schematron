@@ -4,6 +4,5 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     'NAME'	=> 'XML::Schematron',
     'VERSION_FROM' => 'Schematron.pm', # finds $VERSION
-    'PREREQ_PM' => {SAXDriver::XMLParser,
-                    XML::Sablotron},
+    'PREREQ_PM' => {SAXDriver::XMLParser},
 );

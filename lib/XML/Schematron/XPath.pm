@@ -99,15 +99,15 @@ schema defines a set of rules in the XPath language that are used to examine the
 
 A simplified example: 
 
-<schema>
- <pattern>
-  <rule context="page">
-   <assert test="count(*)=count(title|body)">The page element may only contain title or body elements.</assert> 
-   <assert test="@name">A page element must contain a name attribute.</assert> 
-   <report test="string-length(@name) &lt; 5">A page element name attribute must be at least 5 characters long.</report> 
-  </rule>
- </pattern>
-</schema>
+ <schema>
+  <pattern>
+   <rule context="page">
+    <assert test="count(*)=count(title|body)">The page element may only contain title or body elements.</assert> 
+    <assert test="@name">A page element must contain a name attribute.</assert> 
+    <report test="string-length(@name) &lt; 5">A page element name attribute must be at least 5 characters long.</report> 
+   </rule>
+  </pattern>
+ </schema>
 
 Note that an 'assert' rule will return if the result of the test expression is I<not> true, while a 'report' rule will return
 only if the test expression evalutes to true.
@@ -124,7 +124,7 @@ The 'new' constructor accepts the following "named" arguments:
 
 =item * schema
 
-  The filename of the schema to use for generating tests.
+The filename of the schema to use for generating tests.
 
 =item * tests
 
@@ -146,9 +146,9 @@ When called with a reference to a list of lists as its argument (see the format 
 the new() method for details), this method sets the current test stack. Otherwise, it returns an arrayref to the current test
 stack (if any).
 
-=item add_tests(%args);
+=item add_test(%args);
 
-The add_test method allows you push additional tests on to the stack before validation using the typical "hash of named
+The add_test() method allows you push additional tests on to the stack before validation using the typical "hash of named
 parameters" style.
 
 Arguments for this method:
@@ -189,6 +189,8 @@ Example:
 
 Note that add_test() pushes a new test on to the existing test list, while tests() redefines the entire list.
 
+=back
+
 =item validate('my_xml_file.xml')
 
 The validate() method takes the path to the XML document that you wish to validate as its sole argument. It returns the
@@ -200,9 +202,8 @@ generated during validation. When called in a scalar context, this method return
 =head1 CONFORMANCE
 
 XML::Schematron::XPath I<does not conform> to the current Schematron specification since more modern versions allow
-XSLT-specific expressions to be used as tests. This module is provided, then, as a work-around for those wishing to use 
-Schematron-style validation in their Perl applications, but for whom the Sablotron XSLT proccessor is not available. Please 
-note, however, that robust validation is still quite possible using just the XPath language. 
+XSLT-specific expressions to be used as tests. Please note, however, that robust validation is still quite possible using
+just the XPath language. 
 
 =head1 AUTHOR
 
