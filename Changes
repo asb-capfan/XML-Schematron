@@ -1,5 +1,8 @@
 Revision history for Perl extension XML::Schematron.
 0.97  Mon Jan 21 2002
+	- bugfix for verify() in XPath.pm. Thanks to Michael Roberts <mroberts@cq.com>.
+
+0.97  Mon Jan 21 2002
 	- verify() now takes strings too instead of just file names.
 
 0.95  Sun Jan 20 2002

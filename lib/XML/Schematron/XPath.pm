@@ -7,7 +7,7 @@ use XML::XPath;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::Schematron/;
-$VERSION = '0.97';
+$VERSION = '0.98';
 
 sub verify {
     my $self = shift;    
@@ -23,10 +23,10 @@ sub verify {
     my $xp;
          
     if ( $xml =~ /^\s*<\?\s*(xml|XML)\b/ ) {     
-        $xp = XML::XPath->new(xml => $xml_file);
+        $xp = XML::XPath->new(xml => $xml);
     }
     else {
-        $xp = XML::XPath->new(filename => $xml_file);
+        $xp = XML::XPath->new(filename => $xml);
     }
 
 

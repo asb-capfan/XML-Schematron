@@ -8,7 +8,7 @@ use XML::LibXML;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::SchematronXSLTProcessor/;
-$VERSION = '0.95';
+$VERSION = '0.98';
 
 sub verify {
     my $self = shift;    

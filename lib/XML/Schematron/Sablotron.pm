@@ -7,7 +7,7 @@ use XML::Sablotron;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::SchematronXSLTProcessor/;
-$VERSION = '0.97';
+$VERSION = '0.98';
 
 sub verify {
     my $self = shift;    
