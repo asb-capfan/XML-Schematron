@@ -1,11 +1,11 @@
 package XML::Schematron;
 
 use strict;
-use SAXDriver::XMLParser;
+use XML::Parser::PerlSAX;
 
 use vars qw/$VERSION/;
 
-$VERSION = '0.53';
+$VERSION = '0.93';
 
 sub new {
     my ($proto, %args) = @_;
@@ -20,8 +20,13 @@ sub build_tests {
     my $self = shift;
     my $schema = $_[0] || $self->{schema};
     my $sax_handler = SchematronReader->new();
-    my $sax_parser = SAXDriver::XMLParser->new( Handler => $sax_handler);
-    push (@{$self->{tests}}, $sax_parser->parse($schema));
+    my $sax_parser = XML::Parser::PerlSAX->new( Handler => $sax_handler);
+    $sax_parser->parse(Source => {SystemId => $schema});
+    push (@{$self->{tests}}, @{$sax_handler->{tests}});
+
+    # switch back when Orchard matures
+    # push (@{$self->{tests}}, $sax_parser->parse($schema));
+
 }
 
 sub add_test {
@@ -56,13 +61,16 @@ sub new {
 sub start_element {
     my ($self, $el) = @_;
     my ($package, $filename, $line) = caller;
-    my %attrs;
+    
+    # warn "Starting element $el->{Name}\n";
 
-#   warn "Starting element $el->{Name}\n";
+    # switch back when Orchard matures
 
-    foreach my $attr (keys %{$el->{Attributes}}) {
-        $attrs{$el->{Attributes}->{$attr}->{LocalName}} = $el->{Attributes}->{$attr}->{Value};
-    }
+    my %attrs = %{$el->{Attributes}};
+
+    #foreach my $attr (keys %{$el->{Attributes}}) {
+    #    $attrs{$el->{Attributes}->{$attr}->{LocalName}} = $el->{Attributes}->{$attr}->{Value};
+    #}
 
     $context = $attrs{context} if ($attrs{context});
 
@@ -101,8 +109,9 @@ sub characters {
 }
 
 sub end_document {
+     my $self = shift;
      # when the doc ends, return the tests
-     return @tests;
+     $self->{tests} =  \@tests;
 }
 
 sub start_document {
@@ -117,6 +126,70 @@ sub comment {
     # sax conformance only.
 }
 
+
+1;
+
+package XML::SchematronXSLTProcessor;
+
+use vars qw/@ISA/; 
+        
+@ISA = qw/XML::Schematron/;
+
+sub tests_to_xsl {
+    my $self = shift;
+    my $template;
+    my $mode = 'M0';
+    my $ns = qq{xmlns:xsl="http://www.w3.org/1999/XSL/Transform"};
+        
+    $template = qq{<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <xsl:stylesheet $ns version="1.0">
+    <xsl:output $ns method="text"/>
+    <xsl:template $ns match="/">
+    <xsl:apply-templates $ns select="/" mode="$mode"/>};
+        
+            
+    my $last_context_path = '';
+    my $priority = 4000;
+    foreach my $testref (@{$self->{tests}}) {
+        my ($test, $context_path, $message, $test_type, $pattern) = @{$testref};
+        $context_path =~ s/"/'/g if $context_path =~ /"/g;
+        $test =~ s/</&lt;/g;
+        $test =~ s/>/&gt;/g;
+        $message =~ s/\n//g;
+        $message .= "\n";
+    
+        if ($context_path ne $last_context_path) {
+             $template .= qq{\n<xsl:apply-templates $ns mode="$mode"/>\n} unless $priority == 4000;
+             $template .= qq{</xsl:template>\n<xsl:template $ns match="$context_path" priority="$priority" mode="$mode">};
+             $priority--;
+        }
+    
+        if ($test_type eq 'assert') {
+            $template .= qq{<xsl:choose $ns>
+                            <xsl:when $ns test="$test"/>
+                            <xsl:otherwise $ns>In pattern $pattern: $message</xsl:otherwise>
+                            </xsl:choose>};
+        }
+        else {
+            $template .= qq{<xsl:if $ns test="$test">In pattern $pattern: $message</xsl:if>};
+        }
+        $last_context_path = $context_path;
+    }
+        
+        
+    $template .= qq{<xsl:apply-templates $ns mode="$mode"/>\n</xsl:template>\n
+                    <xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="text()" priority="-1" mode="M0"/>
+                    </xsl:stylesheet>};
+        
+    #print "$template\n";
+    return $template;
+}
+
+sub dump_xsl {
+    my $self = shift;
+    my $stylesheet = $self->tests_to_xsl;;
+    return $stylesheet;
+}
 
 1;
 __END__

@@ -1,8 +1,9 @@
-package XML::Schematron::Sablotron;
+package XML::Schematron::LibXSLT;
 
 use strict;
 use XML::Schematron;
-use XML::Sablotron;
+use XML::LibXSLT;
+use XML::LibXML;
 
 use vars qw/@ISA $VERSION/;
 
@@ -20,31 +21,21 @@ sub verify {
     my $template = $self->tests_to_xsl;
     #print "$template\n";
 
-    open (XML, "$xml_file") || die "Could not open file $xml_file $!\n"; 
+    my $parser = XML::LibXML->new();
+    my $xslt = XML::LibXSLT->new();
 
-    local $/;
-    $data = <XML>;
-    close XML;
+    my $xml_doc = $parser->parse_file($xml_file);
+    my $style_doc = $parser->parse_string($template);
+    my $stylesheet = $xslt->parse_stylesheet($style_doc);
+    my $result = $stylesheet->transform($xml_doc);
+    my $ret_string = $stylesheet->output_string($result);
 
-    my $xslt_processor = XML::Sablotron->new();
-    my $result = ' ';
+    if ($do_array) {
+        my @ret_array = split "\n", $ret_string;
+        return @ret_array;
+    }
 
-    my $args = ['template', "$template", 'xml_resource', "$data"];
-
-    my $retcode = $xslt_processor->RunProcessor("arg:/template", "arg:/xml_resource", "arg:/result", 
-                                                [], $args);
-        if ($retcode) {
-          die "Sablotron could not process the XML file";
-        }
-
-   my $ret_string = $xslt_processor->GetResultArg("result");
-
-   if ($do_array) {
-       my @ret_array = split "\n", $ret_string;
-       return @ret_array;
-   }
-
-   return $ret_string;
+    return $ret_string;
 }
 
 1;
@@ -53,13 +44,13 @@ __END__
 
 =head1 NAME
 
-XML::Schematron::Sablotron - Perl extension for validating XML with XPath/XSLT expressions.
+XML::Schematron::LibXSLT - Perl extension for validating XML with XPath/XSLT expressions.
 
 =head1 SYNOPSIS
 
 
-  use XML::Schematron::Sabotron;
-  my $pseudotron = XML::Schematron::Sablotron->new(schema => 'my_schema.xml');
+  use XML::Schematron::LibXSLT;
+  my $pseudotron = XML::Schematron::LibXSLT->new(schema => 'my_schema.xml');
   my $messages = $pseudotron->verify('my_doc.xml');
 
   if ($messages) {
@@ -69,19 +60,19 @@ XML::Schematron::Sablotron - Perl extension for validating XML with XPath/XSLT e
 
   OR, in an array context:
 
-  my $pseudotron = XML::Schematron::Sablotron->new(schema => 'my_schema.xml');
+  my $pseudotron = XML::Schematron::LibXSLT->new(schema => 'my_schema.xml');
   my @messages = $pseudotron->verify('my_doc.xml');
 
 
   OR, just get the generated xsl:
 
-  my $pseudotron = XML::Schematron::Sablotron->new(schema => 'my_schema.xml');
+  my $pseudotron = XML::Schematron::LibXSLT->new(schema => 'my_schema.xml');
   my $xsl = $pseudotron->dump_xsl; # returns the internal XSLT stylesheet.
 
 
 =head1 DESCRIPTION
 
-XML::Schematron::Sablotron serves as a simple validator for XML based on Rick JELLIFFE's Schematron XSLT script. A Schematron
+XML::Schematron::LibXSLT serves as a simple validator for XML based on Rick JELLIFFE's Schematron XSLT script. A Schematron
 schema defines a set of rules in the XPath language that are used to examine the contents of an XML document tree.
 
 A simplified example: 
@@ -192,13 +183,13 @@ The dump_xsl method will return the internal XSLT script created from your schem
 
 =head1 CONFORMANCE
 
-Internally, XML::Schematron::Sablotron uses the Sablotron XSLT proccessor and, while this proccessor is not 100% compliant
-with the XSLT spec at the time of this writing, it is evolving quickly and is very near completion. It is therefore possible
-that you might use a completely valid XSLT expression within one of your schema's tests that will cause this module to die
-unexpectedly. 
+Internally, XML::Schematron::LibXSLT uses the Gnome Project's XSLT proccessor via XML::LibXSLT and, while this proccessor is
+not 100% compliant with the XSLT spec at the time of this writing, it is the best XSLT libraray available to the Perl World at
+the moment. It is therefore possible that you might use a completely valid XSLT expression within one of your schema's tests 
+that will cause this module to die unexpectedly. 
 
-For those platforms on which Sablotron is not available, please see the documentation for XML::Schematron::XPath (also in this
-distribution) for an alternative. 
+For those platforms on which libxslt is not available, please see the documentation for XML::Scmeatron::Sablotron and
+XML::Schematron::XPath (also in this distribution) for alternatives. 
 
 =head1 AUTHOR
 
@@ -214,8 +205,8 @@ under the same terms as Perl itself.
 For information about Schematron, sample schemas, and tutorials to help you write your own schmemas, please visit the
 Schematron homepage at: http://www.ascc.net/xml/resource/schematron/
 
-For information about how to install Sablotron and the necessary XML::Sablotron Perl module, please see the Ginger Alliance
-homepage at: http://www.gingerall.com/ 
+For information about how to install libxslt and the necessary XML::LibXSLT Perl module, please see http://xmlsoft.org/XSLT/
+and CPAN, repectively. 
 
 For detailed information about the XPath syntax, please see the W3C XPath Specification at: http://www.w3.org/TR/xpath.html 
 

@@ -5,4 +5,5 @@ TODO
 Schematron.pm
 lib/XML/Schematron/Sablotron.pm
 lib/XML/Schematron/XPath.pm
-test.pl
+lib/XML/Schematron/LibXSLT.pm
+t/01basic.t

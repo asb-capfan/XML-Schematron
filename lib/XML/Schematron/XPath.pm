@@ -7,7 +7,7 @@ use XML::XPath;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::Schematron/;
-$VERSION = $XML::Schematron::VERSION;
+$VERSION = '0.93';
 
 sub verify {
     my $self = shift;    
@@ -53,7 +53,7 @@ sub verify {
             $node_count = 0;
         }
 
-         #print "node_count is $node_count step_count is $step_count\n";
+         #print "node_count for $test is $node_count step_count is $step_count\n";
         
         if ($node_count != $step_count) {
             if ($do_array) {
