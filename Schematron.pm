@@ -5,7 +5,7 @@ use XML::Parser::PerlSAX;
 
 use vars qw/$VERSION/;
 
-$VERSION = '0.93';
+$VERSION = '0.95';
 
 sub new {
     my ($proto, %args) = @_;

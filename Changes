@@ -1,4 +1,7 @@
 Revision history for Perl extension XML::Schematron.
+0.93  Tue Jan 20 2002
+	- Doc fixes.
+
 0.93  Tue July 03 2001
 	- Switched SAX parser to CPAN-friendly XML::Parser::PerlSax
 	  We will switch back to Orchard if the project revives.

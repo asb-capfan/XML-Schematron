@@ -8,7 +8,7 @@ use XML::LibXML;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::SchematronXSLTProcessor/;
-$VERSION = '0.93';
+$VERSION = '0.95';
 
 sub verify {
     my $self = shift;    
@@ -168,9 +168,9 @@ Note that add_test() pushes a new test on to the existing test list, while tests
 
 =back
 
-=item validate('my_xml_file.xml')
+=item verify('my_xml_file.xml')
 
-The validate method takes the path to the XML document that you wish to validate as its sole argument. It returns the
+The verify() method takes the path to the XML document that you wish to validate as its sole argument. It returns the
 messages (the text() nodes) of any 'assert' or 'report' rules that are returned during validation. When called in an array    
 context, this method returns an array of all messages generated during validation. When called in a a scalar context, this
 method returns a concatenated string of all output.
