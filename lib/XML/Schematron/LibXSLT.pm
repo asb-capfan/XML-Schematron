@@ -12,7 +12,7 @@ $VERSION = '0.95';
 
 sub verify {
     my $self = shift;    
-    my ($xml_file) = $_[0];
+    my $xml = shift;
     my ($data, $do_array);
     $do_array++ if wantarray;
 
@@ -24,7 +24,15 @@ sub verify {
     my $parser = XML::LibXML->new();
     my $xslt = XML::LibXSLT->new();
 
-    my $xml_doc = $parser->parse_file($xml_file);
+    my $xml_doc;
+
+    if ( $xml =~ /^\s*<\?\s*(xml|XML)\b/ ) {
+        $xml_doc = $parser->parse_string($xml);
+    }
+    else {
+        $xml_doc = $parser->parse_file($xml);
+    }
+
     my $style_doc = $parser->parse_string($template);
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
     my $result = $stylesheet->transform($xml_doc);
@@ -168,11 +176,11 @@ Note that add_test() pushes a new test on to the existing test list, while tests
 
 =back
 
-=item verify('my_xml_file.xml')
+=item verify('my_xml_file.xml' or $some_xml_string)
 
-The verify() method takes the path to the XML document that you wish to validate as its sole argument. It returns the
-messages (the text() nodes) of any 'assert' or 'report' rules that are returned during validation. When called in an array    
-context, this method returns an array of all messages generated during validation. When called in a a scalar context, this
+The verify() method takes the path to the XML document that you wish to validate, or a scalar containing the entire document  
+as a string, as its sole argument. It returns the messages  that are returned during validation. When called in an array
+context, this method returns an array of the messages generated during validation. When called in a scalar context, this
 method returns a concatenated string of all output.
 
 =item dump_xsl;

@@ -7,19 +7,28 @@ use XML::XPath;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::Schematron/;
-$VERSION = '0.95';
+$VERSION = '0.97';
 
 sub verify {
     my $self = shift;    
-    my ($xml_file) = $_[0];
+    my $xml = shift;
         
     my ($ret_strings, $do_array, @ret_array);
     $do_array++ if wantarray;
 
     $self->build_tests if $self->{schema};
 
-    #TODO: let 'em invisibly pass filehandles and scalars, too.
-    my $xp = XML::XPath->new(filename => $xml_file);
+    #TODO: let 'em invisibly pass filehandles, too.
+
+    my $xp;
+         
+    if ( $xml =~ /^\s*<\?\s*(xml|XML)\b/ ) {     
+        $xp = XML::XPath->new(xml => $xml_file);
+    }
+    else {
+        $xp = XML::XPath->new(filename => $xml_file);
+    }
+
 
     foreach my $testref (@{$self->{tests}}) {
         # some needless duplication here but it enhances readability
@@ -191,11 +200,12 @@ Note that add_test() pushes a new test on to the existing test list, while tests
 
 =back
 
-=item verify('my_xml_file.xml')
+=item verify('my_xml_file.xml' or $some_xml_string)
 
-The verify() method takes the path to the XML document that you wish to validate as its sole argument. It returns the
-messages  that are returned during validation. When called in an array context, this method returns an array of the messages
-generated during validation. When called in a scalar context, this method returns a concatenated string of all output.
+The verify() method takes the path to the XML document that you wish to validate, or a scalar containing the entire document
+as a string, as its sole argument. It returns the messages  that are returned during validation. When called in an array
+context, this method returns an array of the messages generated during validation. When called in a scalar context, this
+method returns a concatenated string of all output.
 
 =back
 

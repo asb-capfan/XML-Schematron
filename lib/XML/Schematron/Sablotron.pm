@@ -7,11 +7,11 @@ use XML::Sablotron;
 use vars qw/@ISA $VERSION/;
 
 @ISA = qw/XML::SchematronXSLTProcessor/;
-$VERSION = '0.95';
+$VERSION = '0.97';
 
 sub verify {
     my $self = shift;    
-    my ($xml_file) = $_[0];
+    my $xml = shift;
     my ($data, $do_array);
     $do_array++ if wantarray;
 
@@ -20,11 +20,15 @@ sub verify {
     my $template = $self->tests_to_xsl;
     #print "$template\n";
 
-    open (XML, "$xml_file") || die "Could not open file $xml_file $!\n"; 
-
-    local $/;
-    $data = <XML>;
-    close XML;
+    if ( $xml =~ /^\s*<\?\s*(xml|XML)\b/ ) {
+        $data = $xml;
+    }
+    else {
+        open (XML, "$xml") || die "Could not open file $xml $!\n"; 
+        local $/;
+        $data = <XML>;
+        close XML;
+    }
 
     my $xslt_processor = XML::Sablotron->new();
     my $result = ' ';
@@ -177,11 +181,11 @@ Note that add_test() pushes a new test on to the existing test list, while tests
 
 =back
 
-=item verify('my_xml_file.xml')
+=item verify('my_xml_file.xml' or $some_xml_string)
 
-The verify() method takes the path to the XML document that you wish to validate as its sole argument. It returns the
-messages (the text() nodes) of any 'assert' or 'report' rules that are returned during validation. When called in an array    
-context, this method returns an array of all messages generated during validation. When called in a a scalar context, this
+The verify() method takes the path to the XML document that you wish to validate, or a scalar containing the entire document  
+as a string, as its sole argument. It returns the messages  that are returned during validation. When called in an array
+context, this method returns an array of the messages generated during validation. When called in a scalar context, this
 method returns a concatenated string of all output.
 
 =item dump_xsl;
