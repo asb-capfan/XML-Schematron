@@ -1,23 +1,17 @@
 package XML::Schematron;
-
-use vars qw/$VERSION/;
-$VERSION = '1.03';
-
 use Moose;
+use namespace::autoclean;
 with 'MooseX::Traits';
 
 use Moose::Util::TypeConstraints;
 use XML::Schematron::Test;
 use Check::ISA;
 
+use vars qw/$VERSION/;
+$VERSION = '1.05';
+
 
 has '+_trait_namespace' => ( default => 'XML::Schematron' );
-
-#subtype 'My::XML::Schematron::Test' => as class_type('XML::Schematron::Test');
-
-#coerce 'My::XML::Schematron::Test'
-#    => from 'HashRef'
-#        => via { warn "WWWTTTFFF"; XML::Schematron::Test->new( %{$_} ) };
 
 
 has tests => (
@@ -51,6 +45,8 @@ sub add_tests {
         $self->add_test( $test );
     }
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 

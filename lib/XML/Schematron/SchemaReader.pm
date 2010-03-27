@@ -1,5 +1,6 @@
 package XML::Schematron::SchemaReader;
 use Moose;
+use namespace::autoclean;
 use MooseX::NonMoose;
 extends 'XML::SAX::Base';
 
@@ -97,10 +98,6 @@ sub characters {
     my ($self, $characters) = @_;
     $self->add_to_message( $characters->{Data} );
 }
-
-# after 'end_document' => sub {
-#     return [qw|foo bar bax quuuux|];
-# };
 
 no Moose;
 __PACKAGE__->meta->make_immutable;

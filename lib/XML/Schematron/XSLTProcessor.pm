@@ -1,5 +1,6 @@
 package XML::Schematron::XSLTProcessor;
 use Moose::Role;
+use namespace::autoclean;
 with 'XML::Schematron::Schema';
 
 has template_buffer => (
