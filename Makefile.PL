@@ -11,5 +11,6 @@ WriteMakefile(
         MooseX::Types::Path::Class  => 0,
         XML::Filter::BufferText     => 0,
         Check::ISA                  => 0,
+        MooseX::Traits              => 0,
      },
 );

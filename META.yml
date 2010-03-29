@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               XML-Schematron
-version:            1.05
+version:            1.07
 abstract:           ~
 author:  []
 license:            unknown
@@ -13,6 +13,7 @@ requires:
     Check::ISA:           0
     Moose:                0
     MooseX::NonMoose:     0
+    MooseX::Traits:       0
     MooseX::Types::Path::Class:  0
     XML::Filter::BufferText:  0
     XML::SAX:             0
