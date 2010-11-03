@@ -8,7 +8,7 @@ use XML::Schematron::Test;
 use Check::ISA;
 
 use vars qw/$VERSION/;
-$VERSION = '1.07';
+$VERSION = '1.09';
 
 
 has '+_trait_namespace' => ( default => 'XML::Schematron' );
@@ -18,7 +18,7 @@ has tests => (
     traits      => ['Array'],
     is          =>  'rw',
     isa         =>  'ArrayRef[XML::Schematron::Test]',
-    default     =>  sub { [] },    
+    default     =>  sub { [] },
     handles     => {
         _add_test    => 'push',
         all_tests   => 'elements',
@@ -74,7 +74,7 @@ Kip Hampton, khampton@totalcinema.com
 =head1 COPYRIGHT
 
 Copyright (c) 2000-2010 Kip Hampton. All rights reserved. This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself. 
+under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
