@@ -8,7 +8,7 @@ use XML::Schematron::Test;
 use Check::ISA;
 
 use vars qw/$VERSION/;
-$VERSION = '1.09';
+$VERSION = '1.10';
 
 
 has '+_trait_namespace' => ( default => 'XML::Schematron' );
