@@ -189,7 +189,7 @@ under the same terms as Perl itself.
 =head1 SEE ALSO
 
 For information about Schematron, sample schemas, and tutorials to help you write your own schmemas, please visit the
-Schematron homepage at: http://www.ascc.net/xml/resource/schematron/
+Schematron homepage at: L<https://www.schematron.com/>
 
 For detailed information about the XPath syntax, please see the W3C XPath Specification at: http://www.w3.org/TR/xpath.html 
 
