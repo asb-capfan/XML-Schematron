@@ -94,17 +94,18 @@ XML::Schematron::XPath - Perl extension for validating XML with XPath expression
 XML::Schematron::XPath serves as a simple validator for XML based on Rick JELLIFFE's Schematron XSLT script. A Schematron
 schema defines a set of rules in the XPath language that are used to examine the contents of an XML document tree.
 
-A simplified example: 
- <?xml version="1.0"?>
- <schema>
-  <pattern>
-   <rule context="page">
-    <assert test="count(*)=count(title|body)">The page element may only contain title or body elements.</assert> 
-    <assert test="@name">A page element must contain a name attribute.</assert> 
-    <report test="string-length(@name) &lt; 5">A page element name attribute must be at least 5 characters long.</report> 
-   </rule>
-  </pattern>
- </schema>
+A simplified example:
+
+    <?xml version="1.0"?>
+    <schema>
+     <pattern>
+      <rule context="page">
+       <assert test="count(*)=count(title|body)">The page element may only contain title or body elements.</assert> 
+       <assert test="@name">A page element must contain a name attribute.</assert> 
+       <report test="string-length(@name) &lt; 5">A page element name attribute must be at least 5 characters long.</report> 
+      </rule>
+     </pattern>
+    </schema>
 
 Note that an 'assert' rule will return if the result of the test expression is I<not> true, while a 'report' rule will return
 only if the test expression evalutes to true.
