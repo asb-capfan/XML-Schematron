@@ -1,4 +1,7 @@
 Revision history for Perl extension XML::Schematron.
+1.10
+    - Add GitHub repo info.
+
 1.09  We Nov 3 2010
     - Bugfix for modern Moose/Perl combos and native trait values. Thanks to Denise Mauldin for the catch.
 
