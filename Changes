@@ -1,4 +1,8 @@
 Revision history for Perl extension XML::Schematron.
+1.12  2023-05-03
+	- add readme file
+	- removed TODO list (converted to GitHub project)
+
 1.11  2023-05-03
     - No functional changes.
     - POD improvements.

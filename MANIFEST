@@ -11,5 +11,5 @@ MANIFEST			This list of files
 t/001basic.t
 t/data/order.scm
 t/data/order.xml
-TODO
 META.yml                                 Module meta-data (added by MakeMaker)
+Readme.md
