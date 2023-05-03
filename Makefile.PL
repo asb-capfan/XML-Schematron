@@ -14,6 +14,7 @@ WriteMakefile(
         'MooseX::Traits'              => 0,
     },
     'TEST_REQUIRES' => {
+        'Test::More' => 0.98,
         'XML::LibXSLT' => 1.99,
         'XML::LibXML' => 2.0203,
         'XML::XPath' => 1.47,
